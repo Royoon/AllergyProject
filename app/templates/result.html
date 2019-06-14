@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ {% extends 'bootstrap/base.html' %}
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta charset="UTF-8">
+<title>Foogle</title>
+</head>
+<body>
+<!-- Navigation Bar -->
+ {% block navbar %} <nav class="navbar navbar-default" role="navigation">
+<div class="container">
+	<div class="navbar-header">
+		<div style="float:left;">
+		<a href="/productsearch" align="left"><img src="{{ url_for('static', filename='image/foogle.jpg') }}" width="108" height="40" align="left"></a>
+		</div>
+		<div style="float:left;">
+        <form action="/result">
+			<input type="search" type="submit" class="form-control" value="{{productName}}" name="productName">
+			<input type="hidden" name="pageNm" value="1">
+        </form>
+		</div>
+	</div>
+</div>
+</nav>
+{% endblock %}
+
+<!-- Content -->
+ {% block content %}
+<div class="container">
+	<div class="header">
+		<h1>식품 정보</h1>
+	</div>
+
+	<!-- Table -->
+	<table class="table table-hover">
+	<tr>
+		<th>
+			<center>번호</center>
+		</th>
+		<th>
+			<center>제품 이미지</center>
+		</th>
+		<th>
+			<center>제품 이름</center>
+		</th>
+		<th>
+			<center>알레르기 유발 가능 재료</center>
+		</th>
+		<th>
+			<center>원재료 함유량</center>
+		</th>
+	</tr>
+	 {% for i in range(rows) %}
+	<tr>
+		<td style="vertical-align:middle;">
+			<center>{{ temp[i][0] }}</center>
+		</td>
+		<td style="vertical-align:middle;">
+			<center><a href="{{ temp[i][1] }}"><img src="{{ temp[i][1] }}" width="175" height="175"></a></center>
+		</td>
+		<td style="vertical-align:middle;">
+			<center>{{ temp[i][2] }}</center>
+		</td>
+		<td style="vertical-align:middle;">
+			<center>
+				{% for item in allergy[i] %}
+
+				{% if item.find("계란") != -1 or item.find("난류") != -1 %}
+				<a href="http://www.foodallergy.or.kr/info/">{{ item }} </a>
+
+				{% elif item.find("우유") != -1 %}
+				<a href="http://www.foodallergy.or.kr/info/?gb=2">{{ item }} </a>
+
+				{% elif item.find("대두") != -1 %}
+				<a href="http://www.foodallergy.or.kr/info/?gb=3">{{ item }} </a>
+
+				{% elif item.find("밀") != -1 %}
+				<a href="http://www.foodallergy.or.kr/info/?gb=4">{{ item }} </a>
+
+				{% elif item.find("메밀") != -1 %}
+				<a href="http://www.foodallergy.or.kr/info/?gb=5">{{ item }} </a>
+
+				{% elif item.find("땅콩") != -1 or item.find("견과") != -1 %}
+				<a href="http://www.foodallergy.or.kr/info/?gb=6">{{ item }} </a>
+
+				{% elif item.find("조개") != -1 or item.find("게") != -1 or item.find("새우") != -1 or item.find("오징어") != -1 %}
+				<a href="http://www.foodallergy.or.kr/info/?gb=7">{{ item }} </a>
+
+				{% elif item.find("토마토") != -1 %}
+				<a href="http://www.foodallergy.or.kr/info/?gb=8">{{ item }} </a>
+
+				{% elif item.find("고기") != -1 %}
+				<a href="http://www.foodallergy.or.kr/info/?gb=11">{{ item }} </a>
+
+				{% else %}
+				<p>{{ item }} </p>
+				{% endif %}
+
+				{% endfor %}
+			</center>
+		</td>
+		<td width="400" style="vertical-align:middle;">
+			<center>{{ temp[i][4] }}</center>
+		</td>
+	</tr>
+	 {% endfor %}
+	</table>
+
+    <nav aria-label="...">
+		<center>
+	<ul class="pagination justify-content-center" >
+		{% for i in range(1, pageCount+1) %}
+		{% if pageNm==i %}
+		<li class="page-item active"><a class="page-link" href="/result?productName={{productName}}&pageNm={{ i }}">{{ i }}</a></li>
+		{% else: %}
+		<li class="page-item"><a class="page-link" href="/result?productName={{productName}}&pageNm={{ i }}">{{ i }}</a></li>
+		{% endif %}
+		{% endfor %}
+	</ul>
+	</center>
+	</nav>
+
+</div>
+ {% endblock %}
+</body>
+</html>
