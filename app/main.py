@@ -3,7 +3,7 @@ from flask_bootstrap import Bootstrap
 import requests
 from bs4 import BeautifulSoup
 
-from app.model.url import Domain
+from app.model.url import *
 
 app = Flask(__name__)
 bootstrap = Bootstrap(app)
